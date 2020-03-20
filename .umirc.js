@@ -2,16 +2,7 @@
 // ref: https://umijs.org/config/
 export default {
 	treeShaking: true,
-	publicPath: '/MCBBS-Signature',
-	routes: [
-		{
-			path: '/',
-			component: '../layouts/index',
-			routes: [
-				{ path: '/', component: '../pages/index' }
-			]
-		}
-	],
+	publicPath: '/MCBBS-Signature/',
 	plugins: [
 		// ref: https://umijs.org/plugin/umi-plugin-react.html
 		['umi-plugin-react', {
