@@ -3,6 +3,7 @@
 export default {
 	treeShaking: true,
 	publicPath: '/MCBBS-Signature/',
+	history: 'hash',
 	plugins: [
 		// ref: https://umijs.org/plugin/umi-plugin-react.html
 		['umi-plugin-react', {
