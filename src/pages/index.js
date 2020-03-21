@@ -4,7 +4,9 @@ import {
 	Button,
 	Input,
 	Checkbox,
-	Modal
+	Modal,
+	Row,
+	Col
 } from 'antd';
 import {
 	ChromePicker
@@ -37,6 +39,8 @@ var icons = [
 	{ label: 'Twitter', value: 'twitter', img: img_twitter },
 	{ label: 'Github', value: 'github', img: img_github }
 ];
+var icon_map = {};
+icons.forEach(icon=>icon_map[icon.value]=icon.label);
 
 class IndexPage extends react.Component {
 
@@ -76,6 +80,31 @@ class IndexPage extends react.Component {
 		}
 	}
 
+	selectIcons(items) {
+		for(var i in items) {
+			items[i] = {
+				value: items[i],
+				index: i
+			};
+		}
+		console.log(items)
+		this.setState({icons: items});
+	}
+
+	moveUp(index) {
+		var ic = this.state.icons;
+		ic[index].index = index-1;
+		ic[index-1].index = index;
+		this.setState({icons:ic.sort((a,b)=>a.index-b.index)});
+	}
+
+	moveDown(index) {
+		var ic = this.state.icons;
+		ic[index].index = index+1;
+        ic[index+1].index = index;
+        this.setState({icons:ic.sort((a,b)=>a.index-b.index)});
+	}
+
 	render() {
 		return (
 		<div>
@@ -87,9 +116,16 @@ class IndexPage extends react.Component {
 				<Upload callback={data=>this.setState({logo:data})}>上传LOGO</Upload>
 				<div>主题色<Input defaultValue='#FFFFFF' onChange={e=>this.setState({bg:e.target.value})}/></div>
 				<br/>
-				<Checkbox.Group options={icons} onChange={items=>this.setState({icons:items})}/>
+				<Checkbox.Group options={icons} onChange={items=>this.selectIcons(items)}/>
+				{this.state.icons.map(icon=>(
+					<Row>
+						<Col span={5}>{icon_map[icon.value]}</Col>
+						<Col span={3}>{icon.index!=0 && <Button size='small' onClick={()=>this.moveUp(icon.index)}>↑</Button>}</Col>
+						<Col span={3}>{icon.index!=this.state.icons.length-1 && <Button size='small' onClick={()=>this.moveDown(icon.index)}>↓</Button>}</Col>
+					</Row>
+				))}
 			</Card>
-			<Painter logo={this.state.logo} icons={this.state.icons} bg={this.state.bg} iconData={this.state.iconData}/>
+			<Painter logo={this.state.logo} icons={this.state.icons.map(i=>i.value)} bg={this.state.bg} iconData={this.state.iconData}/>
 		</div>
 		);
 	}
